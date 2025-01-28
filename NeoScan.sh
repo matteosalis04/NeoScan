@@ -1,55 +1,138 @@
+
 #!/bin/bash
 ##############################
-###### Scansione con nmap ####
-#############################
+###### Scan with Nmap ########
 ##############################
-#############################
-###### version.0.1.1 ########
+##############################
+##############################
+######### By .MagicSale ######
+##############################
+##############################
+###### version.0.3.0. ########
 ##############################
 
-# Banner principale
-cat << "EOF"
-███╗   ██╗███╗   ███╗ █████╗ ██████╗     ████████╗ ██████╗  ██████╗ ██╗     
-████╗  ██║████╗ ████║██╔══██╗██╔══██╗    ╚══██╔══╝██╔═══██╗██╔═══██╗██║     
-██╔██╗ ██║██╔████╔██║███████║██████╔╝       ██║   ██║   ██║██║   ██║██║     
-██║╚██╗██║██║╚██╔╝██║██╔══██║██╔═══╝        ██║   ██║   ██║██║   ██║██║     
-██║ ╚████║██║ ╚═╝ ██║██║  ██║██║            ██║   ╚██████╔╝╚██████╔╝███████╗
-╚═╝  ╚═══╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝            ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝
-EOF
+## Permission root
+if ((! $EUID == 0)); then 
+    echo "Please run as root"
+    exit 1 
+fi
+### Control if Nmap installed on device
+if ! command -v nmap &> /dev/null; then
+    echo "nmap is not installed!"
+    sudo apt install nmap
+    exit 1
+fi
 
-
-
+### Variables
+data=$(date +%Y-%m-%d-%H:%M)
+parametri=("tcp" "udp" "all" "vuln")
 partcp="-sS -sV -Pn"
 parudp="-sU -Pn"
 script="-O --script vuln"
-	
-read -p "Parameters(tcp, udp, all, vuln(script)): " parametro
-
-read -p "Target: " target
-
-echo "Scan the $target...."
+username=$(whoami)
 
 
-if [[ "$parametro" == "tcp" ]]; then
-    comando="nmap $partcp $target"
-    $comando > output.txt
-elif [[ "$parametro" == "udp" ]]; then
-    comando="nmap $parudp $target"
-    $comando > output.txt
-elif [[ "$parametro" == "all" ]]; then
-    comando="nmap -p- $target"
-    $comando > output.txt
-elif [[ "$parametro" == "vuln" ]]; then
-    comando="nmap $script $target"
-    $comando > output.txt
-else
-    echo "Parameters not valid!"
-    exit
-fi
+### Banner  
+cat << "EOF" 
+
+ ______     ______     ______     __   __        __    __     ______    
+/\  ___\   /\  ___\   /\  __ \   /\ "-.\ \      /\ "-./  \   /\  ___\   
+\ \___  \  \ \ \____  \ \  __ \  \ \ \-.  \     \ \ \-./\ \  \ \  __\   
+ \/\_____\  \ \_____\  \ \_\ \_\  \ \_\\"\_\     \ \_\ \ \_\  \ \_____\ 
+  \/_____/   \/_____/   \/_/\/_/   \/_/ \/_/      \/_/  \/_/   \/_____/ 
+                                                                                      
+EOF
+
+echo "NeoScan v0.3.0 - Advanced Nmap Scanning Tool"
+echo "Created by .MagicSale - https://github.com/matteosalis04"
+echo "Welcome $username - $data"
 
 
-echo "####################"
-echo "Scan Complete"
-echo "####################"
+### Zone Input
+function input(){
+    read -p "Parameters(tcp, udp, all, vuln(script)): " parametro
+    read -p "Directory(lascia vuoto per directory di default): " directory
+    read -p "Target: " target
+} 
 
 
+### Check Zone
+function check_parameter(){
+    if [[ ! " ${parametri[*]} " =~ " $parametro " ]]; then
+        echo "Error - Parameters: $parametro. Parameters valid: ${parametri[*]}"
+        exit 1
+    fi
+         
+}
+
+function check_target(){
+    if [[ -z "$target" || ! "$target" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ && ! "$target" =~ ^[a-zA-Z0-9._-]+$ ]]; then
+        echo "Target not valid - $target"
+        echo "write a IP valid (es. 192.168.1.1) or hostname (es. example.com)."
+        exit 1
+    fi
+}
+
+
+### Zone Comands
+function comands(){
+    if [[ "$parametro" == "tcp" ]]; then
+        comando="nmap $partcp $target"
+        ### Control if exist the directory
+        if [[ "$directory" == "" ]]; then
+            directory="./scan_tcp.txt" 
+            $comando > ./scan_tcp.txt
+        else
+            $comando > $directory
+        fi       
+    elif [[ "$parametro" == "udp" ]]; then
+        comando="nmap $parudp $target"
+        ### Control if exist the directory
+        if [[ "$directory" == "" ]]; then
+            directory="./scan_udp.txt" 
+            $comando > ./scan_udp.txt
+        else
+            $comando > $directory
+        fi  
+    elif [[ "$parametro" == "all" ]]; then
+        comando="nmap -p- $target"
+        ### Control if exist the directory
+        if [[ "$directory" == "" ]]; then
+            directory="./scan_all.txt"
+            $comando > ./scan_all.txt
+        else
+            $comando > $directory
+        fi 
+    elif [[ "$parametro" == "vuln" ]]; then
+        comando="nmap $script $target"
+        ### Control if exist the directory
+        if [[ "$directory" == "" ]]; then
+            directory="./scan_vuln.txt"
+            $comando > ./scan_vuln.txt
+        else
+            $comando > $directory
+        fi
+    else
+        echo "error!"
+        exit 1
+    fi
+}
+
+function complete(){
+    echo "####################"
+    echo "Scan Complete"
+    echo "Result -> cat $directory"
+    echo "####################"
+}
+
+
+function main(){
+    input
+    check_parameter
+    check_target
+    echo "Scan the $target...."
+    comands
+    complete
+}
+
+main 
