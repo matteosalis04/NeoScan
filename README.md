@@ -1,6 +1,6 @@
-# NmapScanScript
+# NeoScan v1.1.0
 
-NmapScanScript is a simple and versatile bash script for performing network scans using `nmap`. This script allows you to execute various types of scans (TCP, UDP, all ports, vulnerability) on a target specified by the user.
+NeoScan is a simple and versatile bash script for performing network scans using `nmap`. This script allows you to execute various types of scans (TCP, UDP, all ports, vulnerability) on a target specified by the user.
 
 ## Features
 
@@ -13,7 +13,7 @@ NmapScanScript is a simple and versatile bash script for performing network scan
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/matteosalis04/NmapScanScript.git
+   git clone https://github.com/matteosalis04/NeoScan.git
 
 
 ## Requirements
