@@ -1,30 +1,52 @@
-# NeoScan v1.1.0
+# NeoScan v3.0.0 - Advanced Nmap Scanning Tool
 
-NeoScan is a simple and versatile bash script for performing network scans using `nmap`. This script allows you to execute various types of scans (TCP, UDP, all ports, vulnerability) on a target specified by the user.
+## 🎯 Overview
+A complete script revision that introduces a modular structure, advanced security checks, and improved output management.
 
-## Features
+## 🚀 Major Changes
+- Complete code restructuring with modular architecture
+- Introduction of security checks and validation
+- Flexible output management system
+- New ASCII art banner
+- Full English language support
 
-- **TCP Scan**: Performs a TCP scan with service version detection.
-- **UDP Scan**: Performs a UDP scan with service detection.
-- **Full Scan**: Performs a scan of all ports.
-- **Vulnerability Scan**: Performs a vulnerability scan using `vuln` scripts.
+## ✨ New Features
+- **Security Checks**:
+  - Automatic root permissions verification
+  - nmap installation check with auto-install capability
+  - Robust target and parameter validation
 
-## Usage
+- **File Management**:
+  - Scan-type specific outputs (scan_tcp.txt, scan_udp.txt, etc.)
+  - Custom directory support
+  - Flexible path handling
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/matteosalis04/NeoScan.git
+- **UX Improvements**:
+  - Username and timestamp display
+  - More descriptive error messages
+  - Clear output file path feedback
+  - Professional banner with project information
 
+## 🔧 Technical Improvements
+- Introduction of modular functions:
+  - `input()`: user input handling
+  - `check_parameter()`: parameter validation
+  - `check_target()`: IP/hostname validation
+  - `comands()`: scan execution
+  - `complete()`: completion handling
+  - `main()`: workflow orchestration
 
-## Requirements
-   - **nmap** must be installed on the system.
-     
-## Example Execution
-   ```bash
-   Parameters (tcp, udp, all, vuln(script)): tcp
-   Target: 192.168.1.1
-   Scan the 192.168.1.1....
-   ####################
-   Scan Completed
-   ####################
+## ⚙️ Technical Requirements
+- Bash shell
+- Root privileges
+- nmap installed
 
+## 📝 Usage
+```bash
+sudo ./NeoScan.sh
+
+Available scan types:
+- tcp  (TCP scan with service version detection)
+- udp  (UDP scan)
+- all  (Full port scan)
+- vuln (Vulnerability scan)
