@@ -8,7 +8,7 @@
 ######### By .MagicSale ######
 ##############################
 ##############################
-###### version.0.3.0. ########
+###### version.3.0.0. ########
 ##############################
 
 ## Permission root
@@ -43,7 +43,7 @@ cat << "EOF"
                                                                                       
 EOF
 
-echo "NeoScan v0.3.0 - Advanced Nmap Scanning Tool"
+echo "NeoScan v3.0.0 - Advanced Nmap Scanning Tool"
 echo "Created by .MagicSale - https://github.com/matteosalis04"
 echo "Welcome $username - $data"
 
